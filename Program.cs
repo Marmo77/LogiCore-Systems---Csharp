@@ -9,12 +9,15 @@ class Magazyn
     string localization;
     string name;
     
-    // Wysyłki
-    int prodDailyLimit;
-    int actualProd;
-    
+    // Limit Miejsca
+    float prodDailyLimit;
+    float actualProd = 0;
+
     // ograniczenia
     //X
+
+    //lista produtkow
+    Dictionary<Produkt, int> produkty = new Dictionary<Produkt,int>();
 
     public Magazyn(string name,  string localization, int prodLimit)
     {
@@ -23,6 +26,7 @@ class Magazyn
         this.localization = localization;
         this.name = name;
         this.prodDailyLimit = prodLimit;
+        this.produkty = new Dictionary<Produkt,int>();
 
     }
 
@@ -31,19 +35,63 @@ class Magazyn
         Console.WriteLine($"----- DANE FIRMY {name.ToUpper()} -----");
         Console.WriteLine($"ID: {id}");
         Console.WriteLine($"Lokalizacaja: {localization}");
-        Console.WriteLine($"Limit Dzienny Wysyłek: {prodDailyLimit}");
-        Console.WriteLine($"Aktualna Liczba Wysyłek: {actualProd}");
+        Console.WriteLine($"Maksymalna pojemność : {prodDailyLimit}");
+        Console.WriteLine($"Aktualnie zajęte: {actualProd}");
+        Console.WriteLine($"---------------------------------------");
     }
 
-    public bool CzyMozeWyslac()
+    public bool DodajProduktDoMagazynu(Produkt produkt, int ilosc)
     {
-        if (actualProd > prodDailyLimit)
+        // zajmowana przestrzen produktem (maslo nie zajmuje tyle miejsca co pralka) 
+        // podstawowe rownanie -> (SpaceTakenItem - [waga produktu * rozmiar / 100] * ilosc)
+        float spaceTaken = produkt.SpaceTakenItem * ilosc;
+        // sprawdzamy czy dodanie nie przekroczy limitu
+        if (actualProd + spaceTaken > prodDailyLimit)
         {
-            return true;
+            Console.WriteLine("Limit dziennych przesyłek w magazynie");
+            return false;
         }
+
+        actualProd += spaceTaken;
+
+        // sprawdza czy produkt juz istnieje w Dict, jesli tak to dodaje do niego ilosc, inaczej dodajemy nowy produkt do listy.
+        if (produkty.ContainsKey(produkt))
+            produkty[produkt] += ilosc;
         else
-        { 
-           return false; 
+            produkty.Add(produkt, ilosc);
+
+        Console.WriteLine($"{produkt.Name} został pomyślnie dodany do magazynu w ilości {ilosc} \n");
+        return true;
+    }
+    public void IleZostaloMiejsca()
+    {
+        // w % pokazuje ile zostalo miejsca w magazynie
+        float spaceLeft = (actualProd / prodDailyLimit) * 100;
+        Console.WriteLine("---- MIEJSCE W MAGAZYNIE ----");
+        Console.WriteLine($"Aktualne zajęto: {spaceLeft}% magazynu");
+        Console.WriteLine("-----------------------------");
+    }
+
+    public void PokazMagazyn()
+    {
+        Console.WriteLine("------- ZASOBY MAGAZYNU -------");
+        if (produkty.Count == 0)
+        {
+            Console.WriteLine("Brak produktów w magazynie.");
+            return;
+        }
+
+        // Iterujemy po parach: klucz = Produkt, wartość = ilość
+        foreach (var kvp in produkty)
+        {
+            var produkt = kvp.Key;
+            var ilosc = kvp.Value;
+
+            // Możesz użyć metody produktu do wyświetlenia szczegółów
+            produkt.PokazProdukt();
+            Console.WriteLine($"Ilość w magazynie: {ilosc}");
+            Console.WriteLine($"Zajmowane miejsce w magazynie: {produkt.SpaceTakenItem * ilosc}");
+            Console.WriteLine("-----------------------------");
         }
     }
 }
@@ -64,6 +112,8 @@ class Produkt
     public float Weight { get; set; }
     public int Size { get; set; }
     public ProduktTyp Type { get; set; }
+    public float SpaceTakenItem;
+
 
     public Produkt(int id, string name, float weight, int size, ProduktTyp type)
     {
@@ -72,6 +122,7 @@ class Produkt
         Weight = weight;
         Size = size;
         Type = type;
+        SpaceTakenItem = (weight * size) / 100; // zajmowane miejsce procentowo w magazynie
     }
 
     public void PokazProdukt()
@@ -86,12 +137,34 @@ class Program
     {
         Console.WriteLine("HELLO!");
 
-        Magazyn mag1 = new Magazyn("Kasztan Export", "Berlin", 24);
-        mag1.DaneFirmy();
+        // Firma ma własny magazyn i kilka rzeczy p1,..,p4
+        Magazyn MlekoTomka = new Magazyn("Mleko Wujka Tomka Export", "Berlin", 100);
+        MlekoTomka.DaneFirmy();
 
-        // Przykład tworzenia produktu z dozwolonym typem
-        Produkt p1 = new Produkt(1, "Szklanka", 0.5f, 1, ProduktTyp.Kruchy);
-        p1.PokazProdukt();
+        // przykładowe produkty
+        Produkt p1 = new Produkt(1, "Mleko", 1f, 1, ProduktTyp.Standard);
+        Produkt p2 = new Produkt(2, "Masło", 0.1f, 1, ProduktTyp.Standard);
+        Produkt p3 = new Produkt(1, "Maszyna Do Mieszania Mleka", 220f, 5, ProduktTyp.Gabarytowy);
+        Produkt p4 = new Produkt(1, "Ser", 0.5f, 1, ProduktTyp.Standard);
+
+        // DODAWANIE PRODUKTOW DO LISTY I DODAWANIE DO MAGAZYNU FIRMY
+        var produktyTomka = new Dictionary<Produkt, int>
+        {
+            { p1, 2000 },
+            { p2, 300 },
+            { p3, 3 },
+            { p4, 200 }
+        };
+
+        foreach (var kvp in produktyTomka)
+        {
+            MlekoTomka.DodajProduktDoMagazynu(kvp.Key, kvp.Value);
+        }
+
+        MlekoTomka.PokazMagazyn();
+        MlekoTomka.IleZostaloMiejsca();
+
+
 
     }
 }
