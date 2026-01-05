@@ -1,8 +1,8 @@
-<h1 align="center">📦 Intelligent Logistics Order Processing System</h1>
+<h1 align="center">📦 System Magazynowy – aplikacja konsolowa (C#)</h1>
 
 <p align="center">
-  <b>Projekt edukacyjny – programowanie obiektowe (OOP)</b><br/>
-  Symulacja realnego problemu biznesowego z branży logistycznej
+  Projekt edukacyjny w języku <b>C# (.NET)</b><br/>
+  Nauka <b>programowania obiektowego (OOP)</b> oraz modelowania realnego problemu
 </p>
 
 <hr/>
@@ -10,180 +10,186 @@
 <h2>📌 Opis projektu</h2>
 
 <p>
-Projekt przedstawia <b>rdzeń systemu decyzyjnego</b> wykorzystywanego w firmie logistycznej
-obsługującej zamówienia e-commerce.  
-System odpowiada za <b>inteligentne przetwarzanie zamówień</b>, wybór magazynów,
-przewoźników oraz strategii realizacji.
-</p>
-
-<p>
-Nie jest to aplikacja webowa ani mobilna – projekt skupia się wyłącznie na
-<b>logice biznesowej</b> oraz <b>czystym modelu domenowym</b>.
-</p>
-
----
-
-<h2>🎯 Cel projektu</h2>
-
-<ul>
-  <li>Nauka i praktyczne zastosowanie <b>programowania obiektowego (OOP)</b></li>
-  <li>Zrozumienie zasad <b>SOLID</b> w realnym kontekście</li>
-  <li>Modelowanie złożonych problemów biznesowych</li>
-  <li>Przygotowanie do egzaminu <b>INF.04</b></li>
-  <li>Ćwiczenie myślenia projektowego jak w prawdziwej firmie IT</li>
-</ul>
-
-<p>
-Projekt powstał jako <b>forma nauki poprzez symulację realnego zlecenia komercyjnego</b>,
-gdzie programista otrzymuje wymagania biznesowe zamiast gotowych instrukcji.
-</p>
-
----
-
-<h2>🏢 Kontekst biznesowy (fikcyjny)</h2>
-
-<p>
-Firma <b>LogiCore Systems</b> tworzy systemy SaaS dla e-commerce i retail.
-Klienci posiadają wiele magazynów, różne typy produktów oraz korzystają
-z wielu przewoźników.
-</p>
-
-<p>
-Problemem jest:
+Projekt przedstawia prosty <b>system magazynowy</b> działający w aplikacji konsolowej.
+Jego celem jest symulacja działania magazynu, który:
 </p>
 
 <ul>
-  <li>nieoptymalny wybór magazynów</li>
-  <li>zbyt wysokie koszty wysyłki</li>
-  <li>brak przejrzystości procesu realizacji zamówień</li>
+  <li>przechowuje produkty</li>
+  <li>kontroluje zajętość magazynu</li>
+  <li>obsługuje ograniczenia pojemności</li>
+  <li>prezentuje aktualny stan w konsoli</li>
 </ul>
 
 <p>
-Zadaniem systemu jest automatyczne podjęcie decyzji:
-<b>skąd, jak i za ile</b> zrealizować zamówienie.
+Projekt został stworzony jako <b>forma nauki OOP</b> oraz ćwiczenie praktyczne
+do egzaminu <b>INF.04</b>.
 </p>
 
 ---
 
-<h2>🧠 Zakres funkcjonalny</h2>
+<h2>🎯 Dlaczego ten projekt?</h2>
 
-<h3>🏬 Magazyny</h3>
+<p>
+Zamiast prostych przykładów oderwanych od rzeczywistości, projekt:
+</p>
+
+<ul>
+  <li>odwzorowuje <b>realny problem logistyczny</b></li>
+  <li>pokazuje myślenie obiektowege</li>
+  <li>pokazuje, jak dane i logika współpracują ze sobą</li>
+  <li>jest dobrą bazą do dalszej rozbudowy</li>
+</ul>
+
+---
+
+<h2>🧱 Struktura projektu</h2>
+
+<h3>📦 Klasa <code>Produkt</code></h3>
+
+<p>
+Klasa <code>Produkt</code> reprezentuje pojedynczy produkt znajdujący się w magazynie.
+Przechowuje podstawowe informacje potrzebne do logistyki.
+</p>
+
+<ul>
+  <li>identyfikator produktu</li>
+  <li>nazwę</li>
+  <li>wagę</li>
+  <li>rozmiar</li>
+  <li>typ produktu (enum)</li>
+</ul>
+
+<p>
+Na podstawie wagi i rozmiaru obliczana jest wartość:
+<b>SpaceTakenItem</b> – czyli ile miejsca zajmuje jedna sztuka produktu w magazynie.
+</p>
+
+<p>
+Przykładowa implementacja klasy <code>Produkt</code>:
+</p>
+
+<p align="center">
+  <img src="przyklad1.jpg" alt="Kod klasy Produkt" width="80%"/>
+</p>
+
+---
+
+<h3>🏭 Klasa <code>Magazyn</code></h3>
+
+<p>
+Klasa <code>Magazyn</code> reprezentuje magazyn firmy.
+Odpowiada za:
+</p>
+
+<ul>
+  <li>przechowywanie produktów</li>
+  <li>kontrolę zajętości magazynu</li>
+  <li>sprawdzanie limitów</li>
+  <li>prezentację danych w konsoli</li>
+</ul>
+
+<p>
+Magazyn posiada:
+</p>
+
 <ul>
   <li>unikalne ID</li>
-  <li>lokalizacja (region / współrzędne)</li>
-  <li>stan magazynowy produktów</li>
-  <li>ograniczenia wysyłkowe (gabaryty, międzynarodowe, limity)</li>
-</ul>
-
-<h3>📦 Produkty</h3>
-<ul>
-  <li>waga i rozmiar</li>
-  <li>typ: standardowy, kruchy, niebezpieczny</li>
-  <li>możliwe wymagania specjalnego transportu</li>
-</ul>
-
-<h3>🚚 Przewoźnicy</h3>
-<ul>
-  <li>obsługiwane regiony</li>
-  <li>własne algorytmy wyceny</li>
-  <li>ograniczenia produktowe</li>
-  <li>czas dostawy (SLA)</li>
-</ul>
-
-<h3>🛒 Zamówienia</h3>
-<ul>
-  <li>wiele produktów i ilości</li>
-  <li>adres docelowy</li>
-  <li>priorytet (normalny / ekspres)</li>
-  <li>możliwość dzielenia na paczki</li>
+  <li>nazwę</li>
+  <li>lokalizację</li>
+  <li>limit pojemności</li>
+  <li>aktualnie zajęte miejsce</li>
+  <li>słownik produktów i ich ilości</li>
 </ul>
 
 ---
 
-<h2>⚙️ Logika decyzyjna</h2>
+<h2>🔁 Komunikacja między klasami (prosto)</h2>
 
 <p>
-System musi:
-</p>
-
-<ol>
-  <li>zidentyfikować możliwe magazyny</li>
-  <li>sprawdzić ograniczenia logistyczne</li>
-  <li>wybrać strategię realizacji zamówienia</li>
-  <li>dobrać przewoźników</li>
-  <li>obsłużyć konflikty i sytuacje brzegowe</li>
-</ol>
-
-<p>
-Decyzje podejmowane są na podstawie:
+Relacje w projekcie są celowo proste:
 </p>
 
 <ul>
-  <li>kosztu</li>
-  <li>czasu dostawy</li>
-  <li>priorytetu zamówienia</li>
-  <li>ograniczeń biznesowych</li>
+  <li><b>Produkt</b> – przechowuje dane o produkcie</li>
+  <li><b>Magazyn</b> – posiada produkty i zarządza nimi</li>
 </ul>
-
----
-
-<h2>📄 Oczekiwany rezultat działania systemu</h2>
-
-<ul>
-  <li>informacja, czy zamówienie może zostać zrealizowane</li>
-  <li>szczegółowy plan realizacji</li>
-  <li>koszty wysyłek</li>
-  <li>przewidywany czas dostawy</li>
-  <li>ostrzeżenia i decyzje biznesowe</li>
-</ul>
-
----
-
-<h2>🧱 Wymagania techniczne</h2>
-
-<ul>
-  <li>czyste programowanie obiektowe</li>
-  <li>zasady SOLID</li>
-  <li>brak zależności od UI i frameworków</li>
-  <li>możliwość testów jednostkowych</li>
-  <li>logika domenowa oddzielona od infrastruktury</li>
-</ul>
-
----
-
-<h2>🚀 Dlaczego ten projekt?</h2>
 
 <p>
-Projekt został stworzony jako:
+Magazyn:
 </p>
 
 <ul>
-  <li>ćwiczenie <b>realnego myślenia programistycznego</b></li>
-  <li>alternatywa dla prostych CRUD-ów</li>
-  <li>trening do egzaminu <b>INF.04</b> w praktycznej formie</li>
-  <li>podstawa do dalszej rozbudowy (AI, strategie, optymalizacja)</li>
+  <li>przyjmuje obiekty typu <code>Produkt</code></li>
+  <li>sprawdza, czy jest wystarczająco dużo miejsca</li>
+  <li>dodaje produkt do swojego stanu</li>
+  <li>wyświetla aktualny stan w konsoli</li>
 </ul>
 
 <p>
-To nie jest „zadanie szkolne” – to <b>symulacja prawdziwego projektu komercyjnego</b>.
+Dzięki temu:
+</p>
+
+<ul>
+  <li>każda klasa ma jasną odpowiedzialność</li>
+  <li>kod jest czytelny i łatwy do rozbudowy</li>
+</ul>
+
+---
+
+<h2>▶️ Przykładowe działanie aplikacji</h2>
+
+<p>
+Po uruchomieniu programu:
+</p>
+
+<ul>
+  <li>tworzony jest magazyn</li>
+  <li>tworzone są przykładowe produkty</li>
+  <li>produkty są dodawane do magazynu</li>
+  <li>w konsoli wyświetlany jest aktualny stan</li>
+</ul>
+
+<p align="center">
+  <img src="konsola.jpg" alt="Wynik działania aplikacji w konsoli" width="80%"/>
 </p>
 
 ---
 
-<h2>🔮 Możliwości rozbudowy</h2>
+<h2>🚀 Planowana rozbudowa</h2>
+
+<p>
+Projekt jest bazą pod większą aplikację konsolową.
+W kolejnych etapach planowane jest dodanie:
+</p>
 
 <ul>
-  <li>nowi przewoźnicy (np. drony)</li>
-  <li>dynamiczne ceny</li>
-  <li>strategie oparte o AI</li>
-  <li>priorytety klientów VIP</li>
+  <li>📦 klasy <b>Paczka</b> (produkty + ilości)</li>
+  <li>🚚 Dodajnie wysyłania produtków do sklepów</li>
+  <li>💵 Szacowany zarobek za produkty</li>
+  <li>📊 zmniejszenei szans na zarobek poprzez zdarzenia losowe oraz typy np. niebezpieczny </li>
+  <li>🌍 usuwanie produtków i przenoszenie między magazynami</li>
+  <li>⚠️ Funkcjonalność typów: (gabaryty, produkty niebezpieczne)</li>
+  <li>📜 menu konsolowego (dodawanie, usuwanie, podgląd)</li>
+  <li></li>
 </ul>
+
+<p>
+Celem jest stworzenie <b>w pełni działającej aplikacji konsolowej</b>,
+która w logiczny sposób symuluje działanie systemu logistycznego.
+</p>
 
 ---
 
-<h2>🧑‍💻 Autor</h2>
+<h2>🧑‍💻 Podsumowanie</h2>
 
 <p>
-Projekt edukacyjny tworzony w celu rozwoju umiejętności programistycznych
-oraz nauki projektowania systemów obiektowych.
+Projekt:
 </p>
+
+<ul>
+  <li>jest ćwiczeniem OOP w C#</li>
+  <li>odzwierciedla realny problem</li>
+  <li>jest czytelny i możliwy do dalszej rozbudowy</li>
+  <li>dobrze wpisuje się w zakres egzaminu <b>INF.04</b></li>
+</ul>
